@@ -14,6 +14,7 @@
     <h3 class="panel-title"> <%= coupon.user.username %>
     <small> <%= time_ago_in_words(coupon.created_at) %> ago </small> </h3>
   </div>
+  
   <div class="panel-body">
     <a href="<%= coupon.coupon_link %>" target = "_blank">
       <img src = "<%= coupon.image_url %>" class="img-responsive" alt="Responsive image">
