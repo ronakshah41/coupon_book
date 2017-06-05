@@ -6,29 +6,111 @@
 </div>
 
 <div class="row">
-  <div class="col-md-12">
-    <table class="table table-striped table-hover">
-      <tr>
-        <th>User</th>
-        <th>Coupon link</th>
-        <th>Description</th>
-        <th>Image url</th>
-        <th>Actions</th>
-      </tr>
 
-      <% @coupons.each do |coupon| %>
-      <tr>
-        <td><%= coupon.user_id %></td>
-        <td><%= coupon.coupon_link %></td>
-        <td><%= coupon.description %></td>
-        <td><%= coupon.image_url %></td>
-        <td>
-          <a href="/coupons/<%= coupon.id %>" class="btn btn-primary">Show</a>
-          <a href="/coupons/<%= coupon.id %>/edit" class="btn btn-warning">Edit</a>
-          <a href="/delete_coupon/<%= coupon.id %>" class="btn btn-danger" rel="nofollow">Delete</a>
-        </td>
-      </tr>
-      <% end %>
-    </table>
+  <div class = "row">
+<% @coupons.each do |coupon| %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"> <%= coupon.user.username %>
+    <small> <%= time_ago_in_words(coupon.created_at) %> ago </small> </h3>
   </div>
+  <div class="panel-body">
+    <a href="<%= coupon.coupon_link %>" target = "_blank">
+      <img src = "<%= coupon.image_url %>" class="img-responsive" alt="Responsive image">
+    </a>
+  </div>
+
+  <p>
+    <% if coupon.fans.pluck(:id).include? current_user.id %>
+      <a href="/delete_like/<%=coupon.likes.find_by(user_id: current_user.id).id%>" class="btn btn-link">
+        <i class="fa fa-heart"></i>
+      </a>
+        <%=coupon.fans.pluck(:username).to_sentence%> like this
+    <%else %>
+      <form action="/create_like" method="post">
+        <!-- Hidden input for authenticity token to protect from forgery -->
+        <input name="authenticity_token" type="hidden" value="YpxG0cSG2joRTdMoZHwjsNpUAQKpF7AvwlZa1OnUzDgeuBOLBauqXPwtLtBImkZ4dvCLBOgn+jEeH5ib40oWDA==">
+
+        <input type="hidden" name="coupon_id" value= <%=coupon.id%> >
+
+        <input type="hidden" name="user_id" value= <%=current_user.id%> >
+
+        <button class="btn btn-link">
+          <i class="fa fa-heart-o"></i>
+        </button>
+        <%=coupon.fans.pluck(:username).to_sentence%> like this
+      </form>
+    <% end %>
+  </p>
+
+  <ul>
+    <% coupon.comments.each do |comment| %>
+    <li class="media">
+      <div class="media-body">
+        <h6 class="media-heading">
+          <a href="/users/<%=comment.user.id%>"><%=comment.user.username%></a>
+            <small>
+              <%= time_ago_in_words(comment.created_at) %>
+            </small>
+        </h6>
+        <%= comment.text %>
+      </div>
+    </li>
+    <% end %>
+
+    <li class="media">
+      <div class="media-body">
+        <form action="/create_comment" method="post">
+          <!-- Hidden input for authenticity token to protect from forgery -->
+          <input name="authenticity_token" type="hidden" value="HktO4ubw/gma+J+jg0BcwTF4pxFTqQPrWNajuaIJM4xibxu4J92Ob3eYYluvpjkJndwtFxKZSfWEn2H2qJfpuA==">
+
+          <input type="hidden" name="coupon_id" value=<%=coupon.id%>>
+
+          <input type="hidden" name="user_id" value=<%=current_user.id%>>
+
+         <!-- Label and input for body -->
+          <div class="form-group">
+          <label for="body" class="sr-only">
+            Body
+           </label>
+
+            <div class="input-group">
+              <input type="text" id="text" name="text" class="form-control" placeholder="Add a comment..." required>
+
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="submit">
+                <i class="fa fa-commenting-o"></i>
+                </button>
+              </span>
+            </div><!-- /input-group -->
+          </div>
+        </form>
+      </div>
+    </li>
+
+  </ul>
+
+  <div class="btn-group btn-group-justified">
+
+    <% if coupon.user_id == current_user.id %>
+      <a href="/coupons/<%= coupon.id %>/edit" class="btn btn-warning">
+        Edit
+      </a>
+
+      <a href="/delete_coupon/<%= coupon.id %>" class="btn btn-danger" rel="nofollow">
+        Delete
+      </a>
+    <% else %>
+    <% end %>
+  </div>
+</div>
+<% end %>
+</div>
+
+
+
+
+
+
+
 </div>

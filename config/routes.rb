@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  root 'coupons#index'
+  root "coupons#index"
 
   # Routes for the Like resource:
   # CREATE
