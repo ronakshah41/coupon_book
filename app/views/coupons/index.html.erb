@@ -1,20 +1,77 @@
 <div class="page-header">
   <h1>
     Coupons
-    <a href="/coupons/new" class="btn btn-lg btn-success">New Coupon</a>
   </h1>
 </div>
 
 <div class="row">
+  <div class = "row">
 
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"> Publish a New Coupon</h3>
+      </div>
+
+      <div class="panel-body">
+        <form action="/create_coupon" method="post">
+        <!-- Hidden input for authenticity token to protect from forgery -->
+        <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+        <!-- Label and input for user_id -->
+        <div class="form-group">
+          <!-- <label for="user_id" class="control-label">
+            User
+          </label> -->
+
+          <input type="hidden" id="user_id" name="user_id" placeholder="User" class="form-control" value="<%= current_user.id %>">
+        </div>
+
+        <!-- Label and input for coupon_link -->
+        <div class="form-group">
+          <label for="coupon_link" class="control-label">
+            Coupon link
+          </label>
+
+          <input type="text" id="coupon_link" name="coupon_link" placeholder="Coupon link" class="form-control" >
+        </div>
+
+        <!-- Label and input for description -->
+        <div class="form-group">
+          <label for="description" class="control-label">
+            Description
+          </label>
+
+          <input type="text" id="description" name="description" placeholder="Description" class="form-control" >
+        </div>
+
+        <!-- Label and input for image_url -->
+        <div class="form-group">
+          <label for="image_url" class="control-label">
+            Image url
+          </label>
+
+          <input type="text" id="image_url" name="image_url" placeholder="Image url" class="form-control" >
+        </div>
+
+          <button class="btn btn-success">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> Publish Coupon
+          </button>
+        </form>
+    </div>
+  </div>
+  </div>
+</div>
+
+
+<div class="row">
   <div class = "row">
 <% @coupons.each do |coupon| %>
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title"> <%= coupon.user.username %>
-    <small> <%= time_ago_in_words(coupon.created_at) %> ago </small> </h3>
+    <h3 class="panel-title"> <a href="/users/<%=coupon.user.id%>"><%= coupon.user.username %></a>
+    <small> <%= time_ago_in_words(coupon.created_at) %> ago </small> </h3> <h3 class="panel-title"><strong><%= coupon.description %> </strong></h3>
   </div>
-  
+
   <div class="panel-body">
     <a href="<%= coupon.coupon_link %>" target = "_blank">
       <img src = "<%= coupon.image_url %>" class="img-responsive" alt="Responsive image">
@@ -43,6 +100,8 @@
       </form>
     <% end %>
   </p>
+
+
 
   <ul>
     <% coupon.comments.each do |comment| %>

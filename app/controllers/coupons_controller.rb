@@ -1,6 +1,10 @@
 class CouponsController < ApplicationController
   def index
-    @coupons = Coupon.all
+
+    @follows = User.find_by(id: current_user.id).follows_as_follower.pluck(:following_id)
+    @coupons = Coupon.where(user_id: @follows).order(created_at: :desc)
+
+
 
     render("coupons/index.html.erb")
   end
@@ -28,7 +32,7 @@ class CouponsController < ApplicationController
     save_status = @coupon.save
 
     if save_status == true
-      redirect_to("/coupons/#{@coupon.id}", :notice => "Coupon created successfully.")
+      redirect_to(:back, :notice => "Coupon created successfully.")
     else
       render("coupons/new.html.erb")
     end
