@@ -121,7 +121,16 @@
             <a href="/delete_like/<%=coupon.likes.find_by(user_id: current_user.id).id%>" class="btn btn-link">
             <i class="fa fa-heart"></i>
             </a>
-            <%=coupon.fans.pluck(:username).to_sentence%> like this
+            <%=coupon.fans.pluck(:username).to_sentence%>
+              <% if coupon.fans.pluck(:id).count == 0%>
+                Zero likes
+              <%else if coupon.fans.pluck(:id).count == 1 %>
+                likes this
+              <%else%>
+                like this
+              <%end%>
+                <!-- true -->
+              <% end %>
           <%else %>
             <form action="/create_like" method="post">
             <!-- Hidden input for authenticity token to protect from forgery -->
@@ -134,7 +143,16 @@
               <button class="btn btn-link">
                 <i class="fa fa-heart-o"></i>
               </button>
-              <%=coupon.fans.pluck(:username).to_sentence%> like this
+              <%=coupon.fans.pluck(:username).to_sentence%>
+                <% if coupon.fans.pluck(:id).count == 0%>
+                  Zero likes
+                <%else if coupon.fans.pluck(:id).count == 1 %>
+                  likes this
+                <%else%>
+                  like this
+                <%end%>
+                  <!-- true -->
+                <% end %>
             </form>
           <% end %>
         </p>

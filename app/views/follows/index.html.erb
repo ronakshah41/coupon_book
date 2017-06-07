@@ -37,7 +37,7 @@ Who I Follow
     <tr>
       <td><a href = "/users/<%=follow.followee.id %>"><%= follow.followee.username %> </a></td>
       <td>
-        <a href="/delete_follow/<%= follow.id %>" class="btn btn-danger" rel="nofollow">Delete</a>
+        <a href="/delete_follow/<%= follow.id %>" class="btn btn-danger btn-sm" rel="nofollow"><i class="fa fa-user-times" aria-hidden="true"></i> Unfollow</a>
       </td>
     </tr>
     <% end %>
@@ -65,7 +65,7 @@ Who I Follow
       Choose User to Follow
     </label>
 
-    <%= select_tag(:following_id, options_from_collection_for_select(User.all, :id, :username), :class => "form-control") %>
+    <%= select_tag(:following_id, options_from_collection_for_select(User.where(id: User.pluck(:id)-Array(current_user.id)), :id, :username), :class => "form-control") %>
   </div>
 
   <button class="btn btn-success">
