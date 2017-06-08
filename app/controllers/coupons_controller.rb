@@ -55,7 +55,7 @@ class CouponsController < ApplicationController
     save_status = @coupon.save
 
     if save_status == true
-      redirect_to("/coupons/#{@coupon.id}", :notice => "Coupon updated successfully.")
+      redirect_to("/", :notice => "Coupon updated successfully.")
     else
       render("coupons/edit.html.erb")
     end
